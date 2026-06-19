@@ -1,0 +1,236 @@
+{
+  "file": "mane.py / main.py",
+  "type": "python_entry_file",
+  "role": "Mane 서버를 시작하는 메인 파일",
+  "calls": [
+    {
+      "target": "config_manager.py / load_config()",
+      "type": "function",
+      "role": "config/config.json 파일을 읽어서 설정값을 가져옴",
+      "calls": [
+        {
+          "target": "config/config.json",
+          "type": "json_config_file",
+          "role": "서버 주소, 포트, AI 모델, 캐릭터 설정값 저장",
+          "calls": []
+        }
+      ],
+      "returns": {
+        "name": "config",
+        "type": "dict",
+        "role": "main.py에서 사용할 전체 설정값"
+      }
+    },
+    {
+      "target": "FastAPI()",
+      "type": "class_or_server_object",
+      "role": "웹 서버 본체를 만듦",
+      "calls": [],
+      "returns": {
+        "name": "app",
+        "type": "FastAPI_object",
+        "role": "HTTP 요청과 WebSocket 요청을 받을 서버 객체"
+      }
+    },
+    {
+      "target": "ai_server.py / AIServer(config)",
+      "type": "class",
+      "role": "AI 대화 흐름을 관리하는 객체 생성",
+      "calls": [
+        {
+          "target": "ollama_client.py / OllamaClient(base_url, model)",
+          "type": "class",
+          "role": "Ollama 주소와 모델 이름을 저장하고 AI 호출 준비",
+          "input": {
+            "base_url": {
+              "type": "string",
+              "value_from": "config['ai']['ollama_url']",
+              "example": "http://127.0.0.1:11434"
+            },
+            "model": {
+              "type": "string",
+              "value_from": "config['ai']['model']",
+              "example": "qwen2.5:latest"
+            }
+          },
+          "calls": [],
+          "returns": {
+            "name": "self.client",
+            "type": "OllamaClient_object",
+            "role": "나중에 Ollama API 호출 담당"
+          }
+        }
+      ],
+      "returns": {
+        "name": "ai_server",
+        "type": "AIServer_object",
+        "role": "chat, stop, regenerate 처리 담당"
+      }
+    },
+    {
+      "target": "websocket_server.py / WebSocketServer(ai_server)",
+      "type": "class",
+      "role": "브라우저와 서버를 WebSocket으로 연결할 객체 생성",
+      "input": {
+        "ai_server": {
+          "type": "AIServer_object",
+          "role": "브라우저 명령을 AI 처리로 넘길 때 사용"
+        }
+      },
+      "calls": [],
+      "returns": {
+        "name": "ws_server",
+        "type": "WebSocketServer_object",
+        "role": "브라우저 메시지 처리 담당"
+      }
+    },
+    {
+      "target": "app.mount('/static', StaticFiles(directory=WEB_DIR), name='static')",
+      "type": "fastapi_static_mount",
+      "role": "web 폴더 안의 CSS, JS 파일을 브라우저가 불러올 수 있게 함",
+      "calls": [
+        {
+          "target": "web/style.css",
+          "type": "css_file",
+          "role": "Mane 화면 디자인",
+          "calls": []
+        },
+        {
+          "target": "web/app.js",
+          "type": "javascript_file",
+          "role": "버튼, 채팅 입력, WebSocket 연결 처리",
+          "calls": []
+        }
+      ],
+      "returns": null
+    },
+    {
+      "target": "main.py / index()",
+      "type": "function",
+      "role": "브라우저가 '/' 주소로 접속하면 web/index.html 반환",
+      "route": "GET /",
+      "calls": [
+        {
+          "target": "web/index.html",
+          "type": "html_file",
+          "role": "Mane 화면 뼈대",
+          "calls": [
+            {
+              "target": "web/style.css",
+              "type": "css_file",
+              "role": "화면 디자인",
+              "calls": []
+            },
+            {
+              "target": "web/app.js",
+              "type": "javascript_file",
+              "role": "화면 동작, WebSocket 연결",
+              "calls": []
+            }
+          ]
+        }
+      ],
+      "returns": {
+        "name": "FileResponse",
+        "type": "fastapi_response",
+        "role": "브라우저에 index.html 파일 전달"
+      }
+    },
+    {
+      "target": "main.py / client_ws(websocket)",
+      "type": "function",
+      "role": "브라우저가 '/client-ws'로 WebSocket 연결하면 처리 시작",
+      "route": "WebSocket /client-ws",
+      "calls": [
+        {
+          "target": "websocket_server.py / ws_server.handle(websocket)",
+          "type": "function",
+          "role": "실제 WebSocket 연결 처리",
+          "calls": [
+            {
+              "target": "websocket.accept()",
+              "type": "function",
+              "role": "브라우저 WebSocket 연결 허락",
+              "calls": []
+            },
+            {
+              "target": "websocket.send_json(init)",
+              "type": "function",
+              "role": "브라우저에 초기 얼굴값 전송",
+              "data": {
+                "type": "init",
+                "face": ">o<"
+              },
+              "calls": []
+            },
+            {
+              "target": "websocket.receive_json()",
+              "type": "function",
+              "role": "브라우저에서 오는 메시지 받기",
+              "calls": []
+            }
+          ],
+          "returns": null
+        }
+      ],
+      "returns": null
+    },
+    {
+      "target": "logger.py / info('main.py', 'Mane 서버 시작...')",
+      "type": "function",
+      "role": "서버 시작 로그 출력 및 저장",
+      "calls": [
+        {
+          "target": "logs/mane.log",
+          "type": "log_file",
+          "role": "실행 기록 저장",
+          "calls": []
+        }
+      ],
+      "returns": null
+    },
+    {
+      "target": "uvicorn.run('main:app', host=host, port=port, reload=false)",
+      "type": "server_run_function",
+      "role": "FastAPI 서버를 실제로 켬",
+      "input": {
+        "host": {
+          "type": "string",
+          "value_from": "config['server']['host']",
+          "example": "127.0.0.1"
+        },
+        "port": {
+          "type": "int",
+          "value_from": "config['server']['port']",
+          "example": 8765
+        }
+      },
+      "calls": [
+        {
+          "target": "FastAPI app",
+          "type": "server_object",
+          "role": "브라우저 요청을 계속 받음",
+          "calls": [
+            {
+              "target": "GET /",
+              "role": "main.py / index() 호출"
+            },
+            {
+              "target": "WebSocket /client-ws",
+              "role": "main.py / client_ws(websocket) 호출"
+            },
+            {
+              "target": "GET /static/...",
+              "role": "web/style.css 또는 web/app.js 반환"
+            }
+          ]
+        }
+      ],
+      "returns": {
+        "name": "server_running",
+        "type": "runtime_state",
+        "role": "http://127.0.0.1:8765 접속 가능 상태"
+      }
+    }
+  ]
+}
