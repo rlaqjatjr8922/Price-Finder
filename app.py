@@ -28,13 +28,19 @@ def search_status():
 
 @app.post("/Search/naver")
 async def search_naver(request: Request):
-    query = (await request.body()).decode("utf-8").strip()
+    query = (
+        await request.body()
+    ).decode("utf-8").strip()
+
     return backend.search_naver(query)
 
 
 @app.post("/Search/joongmo")
 async def search_joongmo(request: Request):
-    query = (await request.body()).decode("utf-8").strip()
+    query = (
+        await request.body()
+    ).decode("utf-8").strip()
+
     return backend.search_joongmo(query)
 
 
@@ -45,7 +51,10 @@ def search_result():
 
 @app.post("/Search/detail")
 async def search_detail(request: Request):
-    number_text = (await request.body()).decode("utf-8").strip()
+    number_text = (
+        await request.body()
+    ).decode("utf-8").strip()
+
     return backend.search_detail(number_text)
 
 
@@ -64,7 +73,29 @@ def save_settings(data: dict):
     return backend.save_settings(data)
 
 
-app.mount("/", StaticFiles(directory=HTML_DIR, html=True), name="html")
+@app.get("/Selected")
+def get_selected():
+    return backend.get_selected()
+
+
+@app.post("/Selected/Quantity")
+def change_selected_quantity(data: dict):
+    return backend.change_selected_quantity(data)
+
+
+@app.post("/Selected/Delete")
+def delete_selected(data: dict):
+    return backend.delete_selected(data)
+
+
+app.mount(
+    "/",
+    StaticFiles(
+        directory=HTML_DIR,
+        html=True
+    ),
+    name="html"
+)
 
 
 if __name__ == "__main__":

@@ -836,3 +836,478 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+/* =========================================
+   선택한 부품 화면
+========================================= */
+
+.selected-page {
+    width: 100%;
+}
+
+.selected-list {
+    width: 100%;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-top: 3px solid #238ee8;
+}
+
+
+/* =========================================
+   부품 한 줄
+========================================= */
+
+.selected-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    width: 100%;
+    min-height: 118px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.selected-row:last-child {
+    border-bottom: none;
+}
+
+.selected-row-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+
+/* =========================================
+   왼쪽 부품 이름
+========================================= */
+
+.selected-part-label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 6px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.selected-part-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    color: #ffffff;
+    background-color: #238ee8;
+    border-radius: 50%;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.selected-part-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.selected-part-name {
+    color: #111111;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   오른쪽 상품 영역
+========================================= */
+
+.selected-product-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    min-width: 0;
+    padding: 16px 24px;
+
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+.selected-empty-product-area {
+    color: #999999;
+    font-size: 16px;
+}
+
+
+/* =========================================
+   상품 이미지
+========================================= */
+
+.selected-row-image-box {
+    display: flex;
+    flex: 0 0 76px;
+    align-items: center;
+    justify-content: center;
+
+    width: 76px;
+    height: 76px;
+
+    overflow: hidden;
+    color: #999999;
+    background-color: #f7f7f7;
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+}
+
+.selected-row-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.selected-row-image-link:hover {
+    opacity: 0.8;
+}
+
+.selected-row-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.selected-row-image-box.image-error::after {
+    content: "이미지 없음";
+    padding: 6px;
+    font-size: 11px;
+    text-align: center;
+}
+
+.selected-no-image {
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* =========================================
+   상품 이름
+========================================= */
+
+.selected-product-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 7px;
+
+    min-width: 0;
+}
+
+.selected-row-product-name {
+    min-width: 0;
+    overflow: hidden;
+
+    color: #111111;
+    font-size: 18px;
+    line-height: 1.45;
+
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+a.selected-row-product-name:hover {
+    color: #238ee8;
+    text-decoration: underline;
+}
+
+.selected-row-mall {
+    color: #888888;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   수량 조절
+========================================= */
+
+.selected-quantity-box {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+
+    height: 44px;
+
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.selected-quantity-button {
+    width: 44px;
+    height: 44px;
+
+    padding: 0;
+    border: none;
+
+    color: #555555;
+    background-color: #ffffff;
+
+    font-size: 22px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.selected-quantity-button:hover {
+    background-color: #f0f0f0;
+}
+
+.selected-quantity-button:active {
+    background-color: #e4e4e4;
+}
+
+.selected-quantity-button:disabled {
+    color: #bbbbbb;
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.selected-quantity-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 44px;
+
+    box-sizing: border-box;
+    border-right: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+
+    color: #222222;
+    background-color: #ffffff;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   가격
+========================================= */
+
+.selected-price-area {
+    display: flex;
+    flex: 0 0 205px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+
+    white-space: nowrap;
+}
+
+.selected-price-label {
+    color: #777777;
+    font-size: 14px;
+}
+
+.selected-row-price {
+    color: #111111;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   삭제 버튼
+========================================= */
+
+.selected-remove-button {
+    flex: 0 0 auto;
+
+    width: 44px;
+    height: 44px;
+
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+
+    color: #555555;
+    background-color: transparent;
+
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.selected-remove-button:hover {
+    color: #ffffff;
+    background-color: #e53935;
+}
+
+.selected-remove-button:disabled {
+    color: #bbbbbb;
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   오류 박스
+========================================= */
+
+.selected-error-box {
+    padding: 30px;
+
+    color: #555555;
+    background-color: #eeeeee;
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   화면이 좁을 때
+========================================= */
+
+@media (max-width: 1100px) {
+    .selected-product-area {
+        flex-wrap: wrap;
+    }
+
+    .selected-product-text {
+        flex-basis: calc(100% - 110px);
+    }
+
+    .selected-price-area {
+        flex: 1;
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 750px) {
+    .selected-row {
+        grid-template-columns: 90px 1fr;
+    }
+
+    .selected-product-area {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .selected-part-icon {
+        font-size: 26px;
+    }
+
+    .selected-part-name {
+        font-size: 13px;
+    }
+
+    .selected-part-number {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .selected-row-image-box {
+        flex-basis: 62px;
+        width: 62px;
+        height: 62px;
+    }
+
+    .selected-row-product-name {
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    .selected-quantity-box {
+        height: 40px;
+    }
+
+    .selected-quantity-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .selected-quantity-value {
+        width: 46px;
+        height: 40px;
+    }
+
+    .selected-price-area {
+        flex-basis: auto;
+    }
+
+    .selected-row-price {
+        font-size: 17px;
+    }
+
+    .selected-remove-button {
+        width: 40px;
+        height: 40px;
+        font-size: 30px;
+    }
+}
+
+/* =========================================
+   선택한 부품 총 가격
+========================================= */
+
+.selected-total-box {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 30px;
+
+    width: 100%;
+    margin-top: 20px;
+    padding: 24px 30px;
+
+    box-sizing: border-box;
+
+    background-color: #f7f7f7;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+}
+
+.selected-total-label {
+    color: #555555;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#selectedTotalPrice {
+    color: #111111;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+@media (max-width: 750px) {
+    .selected-total-box {
+        justify-content: space-between;
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .selected-total-label {
+        font-size: 17px;
+    }
+
+    #selectedTotalPrice {
+        font-size: 23px;
+    }
+}

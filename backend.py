@@ -765,7 +765,12 @@ def search_save(data):
     print("저장 요청:", data)
 
     try:
-        number = int(data.get("number", data.get("번호", 0)))
+        number = int(
+            data.get(
+                "number",
+                data.get("번호", 0)
+            )
+        )
     except Exception:
         return {
             "type": "save_result",
@@ -773,10 +778,18 @@ def search_save(data):
             "message": "번호가 올바르지 않습니다."
         }
 
-    query = data.get("query", "")
-    selected_buttons = data.get("selected_buttons", [])
+    query = str(
+        data.get("query", "")
+    ).strip()
 
-    selected_detail = search_details.get(number)
+    selected_buttons = data.get(
+        "selected_buttons",
+        []
+    )
+
+    selected_detail = search_details.get(
+        number
+    )
 
     if selected_detail is None:
         return {
@@ -785,27 +798,222 @@ def search_save(data):
             "message": "저장할 상품 번호가 없습니다."
         }
 
+    if not isinstance(selected_buttons, list):
+        return {
+            "type": "save_result",
+            "status": "error",
+            "message": "selected_buttons는 배열이어야 합니다."
+        }
+
     if len(selected_buttons) == 0:
         return {
             "type": "save_result",
             "status": "error",
-            "message": "저장할 부품을 1개 이상 선택해야 합니다."
+            "message": "저장할 부품을 선택해야 합니다."
         }
 
-    saved_detail = dict(selected_detail)
-    saved_detail["저장 검색어"] = query
+    if len(selected_buttons) != 1:
+        return {
+            "type": "save_result",
+            "status": "error",
+            "message": "부품은 한 번에 1개만 선택할 수 있습니다."
+        }
 
-    for part_name in selected_buttons:
-        details[part_name] = saved_detail
+    part_name = str(
+        selected_buttons[0]
+    ).strip()
+
+    if part_name not in part_list:
+        return {
+            "type": "save_result",
+            "status": "error",
+            "message": "올바르지 않은 부품 이름입니다."
+        }
+
+    saved_detail = dict(
+        selected_detail
+    )
+
+    saved_detail["저장 검색어"] = query
+    saved_detail["구매수량"] = 1
+
+    details[part_name] = saved_detail
 
     save_details()
 
-    print("저장 후 details:", details)
+    print(
+        "저장한 부품:",
+        part_name
+    )
+
+    print(
+        "저장 후 details:",
+        details
+    )
 
     return {
         "type": "save_result",
         "status": "ok",
+        "part_name": part_name,
         "message": "저장 완료"
+    }
+
+def get_selected():
+    """
+    선택한 부품 상세정보를 반환합니다.
+
+    반환 예시:
+    {
+        "CPU": {
+            "번호": 1,
+            "검색어": "ddr5 8",
+            "사이트": "joongmo",
+            "상품 이름": "ddr5 8gb 메모리 삽니다",
+            "상품 상세 페이지로 이동하는 링크": "...",
+            "상품 이미지 주소": "...",
+            "특이사항": "2026-06-20 07:11:25",
+            "판매 쇼핑몰 이름": "중고나라",
+            "가격": 1,
+            "저장 검색어": "ddr5 8"
+        }
+    }
+    """
+    return details
+
+def get_selected():
+    # 기존 저장 데이터에 구매수량이 없으면 1로 보정
+    changed = False
+
+    for product in details.values():
+        if not isinstance(product, dict):
+            continue
+
+        if "구매수량" not in product:
+            product["구매수량"] = 1
+            changed = True
+
+    if changed:
+        save_details()
+
+    return details
+
+
+def change_selected_quantity(data):
+    part_name = str(
+        data.get("part_name", "")
+    ).strip()
+
+    try:
+        change = int(
+            data.get("change", 0)
+        )
+    except (TypeError, ValueError):
+        change = 0
+
+    if not part_name:
+        return {
+            "type": "selected_quantity_result",
+            "status": "error",
+            "message": "부품 이름이 없습니다."
+        }
+
+    if part_name not in details:
+        return {
+            "type": "selected_quantity_result",
+            "status": "error",
+            "message": f"{part_name}에 저장된 상품이 없습니다."
+        }
+
+    if change not in (-1, 1):
+        return {
+            "type": "selected_quantity_result",
+            "status": "error",
+            "message": "change 값은 -1 또는 1이어야 합니다."
+        }
+
+    product = details[part_name]
+
+    if not isinstance(product, dict):
+        return {
+            "type": "selected_quantity_result",
+            "status": "error",
+            "message": "저장된 상품 정보 형식이 올바르지 않습니다."
+        }
+
+    try:
+        current_quantity = int(
+            product.get("구매수량", 1)
+        )
+    except (TypeError, ValueError):
+        current_quantity = 1
+
+    if current_quantity < 1:
+        current_quantity = 1
+
+    new_quantity = current_quantity + change
+
+    # 구매수량은 최소 1개
+    if new_quantity < 1:
+        new_quantity = 1
+
+    product["구매수량"] = new_quantity
+
+    # Resources/details.json에 즉시 저장
+    save_details()
+
+    print(
+        "구매수량 변경:",
+        part_name,
+        current_quantity,
+        "->",
+        new_quantity
+    )
+
+    return {
+        "type": "selected_quantity_result",
+        "status": "ok",
+        "part_name": part_name,
+        "quantity": new_quantity,
+        "구매수량": new_quantity,
+        "product": product
+    }
+
+
+def delete_selected(data):
+    part_name = str(
+        data.get("part_name", "")
+    ).strip()
+
+    if not part_name:
+        return {
+            "type": "selected_delete_result",
+            "status": "error",
+            "message": "부품 이름이 없습니다."
+        }
+
+    if part_name not in details:
+        return {
+            "type": "selected_delete_result",
+            "status": "error",
+            "message": f"{part_name}에 저장된 상품이 없습니다."
+        }
+
+    deleted_product = details.pop(part_name)
+
+    # Resources/details.json에 즉시 저장
+    save_details()
+
+    print(
+        "선택한 부품 삭제:",
+        part_name
+    )
+
+    return {
+        "type": "selected_delete_result",
+        "status": "ok",
+        "part_name": part_name,
+        "deleted_product": deleted_product,
+        "message": "삭제 완료"
     }
 
 

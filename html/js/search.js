@@ -2090,53 +2090,53 @@ function ensureProductCardStyle() {
 ========================================= */
 
 function setupGraySelectButtons() {
-    const buttons =
-        document.querySelectorAll(
-            ".gray-select-button"
-        );
-
+    const buttons = document.querySelectorAll(
+        ".gray-select-button"
+    );
 
     buttons.forEach((button) => {
-        button.addEventListener(
-            "click",
-            () => {
-                const partName =
-                    button.dataset.partName;
+        button.addEventListener("click", () => {
+            const partName =
+                button.dataset.partName;
 
-
-                if (
-                    selectedGrayButtons.includes(
-                        partName
-                    )
-                ) {
-                    selectedGrayButtons =
-                        selectedGrayButtons.filter(
-                            (name) => {
-                                return name !== partName;
-                            }
-                        );
-
-                    button.classList.remove(
-                        "selected"
-                    );
-
-                } else {
-                    selectedGrayButtons.push(
-                        partName
-                    );
-
-                    button.classList.add(
-                        "selected"
-                    );
-                }
-
-
-                console.log(
-                    "선택한 저장 부품:",
-                    selectedGrayButtons
+            const wasSelected =
+                button.classList.contains(
+                    "selected"
                 );
+
+            // 모든 버튼 선택 해제
+            buttons.forEach((item) => {
+                item.classList.remove(
+                    "selected"
+                );
+            });
+
+            // 저장 목록 초기화
+            selectedGrayButtons = [];
+
+            // 선택된 버튼을 다시 누른 경우 선택 취소
+            if (wasSelected) {
+                console.log(
+                    "선택된 부품 없음"
+                );
+
+                return;
             }
-        );
+
+            // 현재 버튼 하나만 선택
+            button.classList.add(
+                "selected"
+            );
+
+            selectedGrayButtons = [
+                partName
+            ];
+
+            console.log(
+                "선택한 저장 부품:",
+                selectedGrayButtons
+            );
+        });
     });
 }
 

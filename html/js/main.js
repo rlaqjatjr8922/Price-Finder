@@ -38,6 +38,11 @@ async function showPage(page) {
         return;
     }
 
+    if (page === "selected") {
+        await showSelectedPartsPage(mainBox);
+        return;
+    }
+
     if (page === "settings") {
         await showSettingsPage(mainBox);
         return;
