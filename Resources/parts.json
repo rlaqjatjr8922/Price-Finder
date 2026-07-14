@@ -1,0 +1,14 @@
+{
+    "CPU": true,
+    "메인보드": true,
+    "RAM": false,
+    "그래픽카드": false,
+    "SSD": false,
+    "HDD": false,
+    "파워": false,
+    "케이스": false,
+    "CPU 쿨러": false,
+    "키보드": false,
+    "마우스": false,
+    "모니터": false
+}

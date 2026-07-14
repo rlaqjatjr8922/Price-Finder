@@ -1,0 +1,838 @@
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#menuArea {
+    width: 18%;
+    height: 100%;
+}
+
+#screenArea {
+    width: 82%;
+    height: 100%;
+}
+
+.menu {
+    width: 100%;
+    height: 100%;
+    background-color: #222;
+    color: white;
+    padding: 10%;
+    box-sizing: border-box;
+}
+
+.menu h2 {
+    margin-top: 0;
+    height: 6%;
+}
+
+.menu button {
+    width: 100%;
+    height: 7%;
+    margin-bottom: 5%;
+    border: none;
+    cursor: pointer;
+    font-size: 100%;
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    padding: 2%;
+    background-color: #f5f5f5;
+    box-sizing: border-box;
+}
+
+.box {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 2%;
+    border-radius: 1%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.part-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+}
+
+.part-item {
+    width: 20%;
+    padding: 2%;
+    margin-bottom: 2%;
+    background-color: #dddddd;
+    border: none;
+    border-radius: 3%;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    font-size: 100%;
+}
+
+.part-item.selected {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+}
+
+.next-button {
+    width: 20%;
+    height: 6%;
+    margin-top: 3%;
+    border: none;
+    cursor: pointer;
+    font-size: 100%;
+    background-color: #222;
+    color: white;
+    border-radius: 2%;
+}
+
+.search-part-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+}
+
+.search-part-item {
+    width: 20%;
+    padding: 2%;
+    margin-bottom: 2%;
+    background-color: #dddddd;
+    border-radius: 3%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.search-part-item.selected {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+}
+.search-result-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+}
+
+.search-result-card {
+    width: 100%;
+    padding: 2%;
+    margin-bottom: 2%;
+    background-color: white;
+    border-radius: 2%;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+}
+
+.search-result-card.empty {
+    background-color: #eeeeee;
+    color: #777777;
+}
+
+.search-result-img {
+    width: 20%;
+    max-width: 200px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+.search-control-box {
+    width: 100%;
+    display: flex;
+    gap: 1%;
+    margin-bottom: 2%;
+}
+
+.search-text-input {
+    width: 40%;
+    padding: 1%;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+.search-number-input {
+    width: 20%;
+    padding: 1%;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+.search-button,
+.csv-button,
+.view-button {
+    width: 15%;
+    padding: 1%;
+    border: none;
+    cursor: pointer;
+    background-color: #222;
+    color: white;
+    font-size: 100%;
+}
+
+.search-result-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+}
+
+.search-card {
+    width: 100%;
+    padding: 2%;
+    margin-bottom: 2%;
+    background-color: #eeeeee;
+    border-radius: 2%;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    position: relative;
+}
+
+.search-card.found {
+    background-color: white;
+}
+
+.search-light {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.search-light.on {
+    background-color: #4caf50;
+}
+
+.search-light.off {
+    background-color: #999999;
+}
+
+.view-box {
+    width: 100%;
+    padding: 2%;
+    margin-bottom: 2%;
+    background-color: #f5f5f5;
+    border: 1px solid #cccccc;
+    border-radius: 2%;
+    box-sizing: border-box;
+}
+
+.search-result-img {
+    width: 20%;
+    max-width: 200px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+/* 검색 화면 전체 행 */
+.search-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2%;
+    margin-bottom: 2%;
+}
+
+/* CPU 초록 / 메인보드 회색 표시 영역 */
+.search-part-status-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+    margin-bottom: 3%;
+}
+
+.search-part-status {
+    width: 18%;
+    padding: 1.5%;
+    border-radius: 6px;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+
+/* 값이 false가 아니면 초록 */
+.search-part-status.on {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* 값이 false면 회색 */
+.search-part-status.off {
+    background-color: #cccccc;
+    color: #555555;
+}
+
+/* 글자 입력란 */
+.search-text-input {
+    width: 55%;
+    padding: 1.5%;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+/* 숫자 입력란 */
+.view-number-input {
+    width: 25%;
+    padding: 1.5%;
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+/* 버튼 공통 */
+.search-button,
+.csv-copy-button,
+.view-button {
+    width: 18%;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    background-color: #222;
+    color: white;
+    font-size: 100%;
+    border-radius: 6px;
+}
+
+/* 검색된 개수 문장 */
+.search-count-text {
+    width: 55%;
+    font-size: 110%;
+}
+
+/* 나중에 상품 정보 들어갈 박스 */
+.detail-text-box {
+    width: 100%;
+    height: 45%;
+    padding: 2%;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 100%;
+    line-height: 1.7;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+/* 현재 검색 화면 규칙용 추가 스타일 */
+.hidden {
+    display: none !important;
+}
+
+.selected-part-box {
+    width: 100%;
+    padding: 1.5%;
+    box-sizing: border-box;
+    background-color: #eeeeee;
+    border-radius: 8px;
+    margin-bottom: 2%;
+    font-weight: bold;
+}
+
+.platform-status-box {
+    width: 100%;
+    padding: 1.5%;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    margin-bottom: 2%;
+    line-height: 1.8;
+    font-weight: bold;
+}
+
+.page-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3%;
+    margin-bottom: 2%;
+}
+
+.page-row button {
+    padding: 1.2% 3%;
+    border: none;
+    background-color: #222222;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#pageInfo {
+    font-weight: bold;
+}
+
+.save-button {
+    width: 18%;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    background-color: #222;
+    color: white;
+    font-size: 100%;
+    border-radius: 6px;
+    margin-top: 1%;
+}
+
+.gray-button-box {
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.gray-button-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+}
+
+.gray-select-button {
+    width: 18%;
+    padding: 1.5%;
+    border: none;
+    border-radius: 6px;
+    background-color: #cccccc;
+    color: #333333;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 1%;
+}
+
+.gray-select-button.selected {
+    background-color: #4caf50;
+    color: white;
+}
+.price-filter-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.price-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.price-input {
+    width: 180px;
+    height: 45px;
+    padding: 0 14px;
+    font-size: 16px;
+}
+
+.price-slider {
+    flex: 1;
+    min-width: 300px;
+}
+
+.price-apply-row {
+    margin-top: 12px;
+}
+
+.price-apply-button {
+    width: 160px;
+    height: 45px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.price-filter-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.price-input-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.price-input {
+    width: 180px;
+    height: 45px;
+    padding: 0 14px;
+    font-size: 16px;
+}
+
+.range-slider-box {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    margin-top: 10px;
+}
+
+.range-slider-track {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #dddddd;
+    border-radius: 999px;
+}
+
+.range-slider-fill {
+    position: absolute;
+    top: 16px;
+    height: 6px;
+    background: #222222;
+    border-radius: 999px;
+}
+
+.range-slider {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+.range-slider::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.range-slider::-moz-range-thumb {
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.range-slider::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.range-slider::-moz-range-track {
+    background: transparent;
+}
+
+.price-apply-row {
+    margin-top: 12px;
+}
+
+.price-apply-button {
+    width: 160px;
+    height: 45px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.price-filter-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.price-input-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.price-input {
+    width: 180px;
+    height: 45px;
+    padding: 0 14px;
+    font-size: 16px;
+}
+
+.range-slider-box {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    margin-top: 10px;
+}
+
+.range-slider-track {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #dddddd;
+    border-radius: 999px;
+}
+
+.range-slider-fill {
+    position: absolute;
+    top: 16px;
+    height: 6px;
+    background: #222222;
+    border-radius: 999px;
+}
+
+.range-slider {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+.range-slider::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.range-slider::-moz-range-thumb {
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.range-slider::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.range-slider::-moz-range-track {
+    background: transparent;
+}
+
+.price-apply-row {
+    margin-top: 12px;
+}
+
+.price-apply-button {
+    width: 160px;
+    height: 45px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.price-filter-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.price-input-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.price-input {
+    width: 180px;
+    height: 45px;
+    padding: 0 14px;
+    font-size: 16px;
+}
+
+.range-slider-box {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    margin-top: 10px;
+}
+
+.range-slider-track {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #dddddd;
+    border-radius: 999px;
+}
+
+.range-slider-fill {
+    position: absolute;
+    top: 16px;
+    height: 6px;
+    background: #222222;
+    border-radius: 999px;
+}
+
+.range-slider {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+.range-slider::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.range-slider::-moz-range-thumb {
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    background: #222222;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.range-slider::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.range-slider::-moz-range-track {
+    background: transparent;
+}
+
+.price-result-row {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* 설정 화면 */
+.settings-box {
+    width: 100%;
+    padding: 2%;
+    box-sizing: border-box;
+    background-color: #f7f7f7;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    margin-bottom: 2%;
+}
+
+.settings-box h2 {
+    margin-top: 0;
+}
+
+.settings-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.settings-row label {
+    width: 230px;
+    font-weight: bold;
+}
+
+.settings-select {
+    width: 320px;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 16px;
+}
+
+.settings-special-box {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: #eeeeee;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    margin-top: 16px;
+    opacity: 0.7;
+}
+
+.settings-special-box.enabled {
+    background-color: #e9ffe9;
+    border-color: #4caf50;
+    opacity: 1;
+}
+
+.settings-check-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.settings-checkbox {
+    width: 22px;
+    height: 22px;
+    accent-color: #4caf50;
+    cursor: pointer;
+}
+
+.settings-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.settings-number-input {
+    width: 180px;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.settings-range {
+    flex: 1;
+    min-width: 300px;
+}
+
+.settings-range:disabled,
+.settings-number-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.settings-unit {
+    width: 50px;
+    font-weight: bold;
+}
+
+.settings-save-button {
+    width: 180px;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222222;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}

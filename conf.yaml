@@ -1,0 +1,29 @@
+# 네이버
+naver:
+  api:
+    sort: "asc"
+    exclude: "used:cbshop:rental"
+
+  special:
+    type:
+      - lowest_price
+      - lowest_price_percent
+
+    # 최저가보다 얼마까지 비싸도 허용할지
+    # -1이면 무제한
+    lowest_price: -1
+
+    # 최저가보다 최대 몇 % 비싸도 허용할지
+    # -1이면 무제한
+    price_tolerance_percent: -1
+
+
+# 중고닷
+joongmo:
+  special:
+    type:
+      - max_listing_age_months
+
+    # 몇 개월 전 매물까지 허용할지
+    # -1이면 무제한
+    max_listing_age_months: 3
