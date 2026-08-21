@@ -1,37 +1,7 @@
-# 네이버
-naver:
-  api:
-    sort: "asc"
-    exclude: "used"
-
-  special:
-    type:
-      - lowest_price
-      - lowest_price_percent
-
-    # 최저가보다 얼마까지 비싸도 허용할지
-    # -1이면 무제한
-    lowest_price: 370000
-
-    # 최저가보다 최대 몇 % 비싸도 허용할지
-    # -1이면 무제한
-    price_tolerance_percent: -1
-
-
 # 다나와
 danawa:
   api:
     sort: "asc"
-    exclude: "used"
-
-  special:
-    type:
-      - lowest_price
-      - lowest_price_percent
-
-    lowest_price: -1
-    price_tolerance_percent: -1
-
 
 # 중고닷
 joongmo:

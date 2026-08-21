@@ -1,6 +1,7 @@
 import json
 import time
 import uuid
+from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -146,7 +147,10 @@ def make_absolute_link(link, platform):
     if not link:
         return link
 
-    if link.startswith("http://") or link.startswith("https://"):
+    if (
+        link.startswith("http://")
+        or link.startswith("https://")
+    ):
         return link
 
     base = PLATFORM_BASE_URL.get(platform)
@@ -157,7 +161,10 @@ def make_absolute_link(link, platform):
     return link
 
 
-def normalize_product(product, fallback_platform=None):
+def normalize_product(
+    product,
+    fallback_platform=None
+):
     platform = (
         product.get("platform")
         or fallback_platform
@@ -206,7 +213,10 @@ def normalize_product(product, fallback_platform=None):
     }
 
 
-def request_normal_platform(platform, keyword):
+def request_normal_platform(
+    platform,
+    keyword
+):
     url = f"{BASE_URL}/api/search/{platform}"
 
     payload = {
@@ -221,7 +231,9 @@ def request_normal_platform(platform, keyword):
         payload
     )
 
-    return get_products_from_response(data)
+    return get_products_from_response(
+        data
+    )
 
 
 def request_daangn(keyword):
@@ -237,7 +249,9 @@ def request_daangn(keyword):
 
     url = f"{BASE_URL}/api/search/daangn"
 
-    for batch_index in range(total_batches):
+    for batch_index in range(
+        total_batches
+    ):
         print(
             f"당근 배치 "
             f"{batch_index + 1}/"
@@ -251,7 +265,8 @@ def request_daangn(keyword):
             "maxItems": 1000,
             "batchIndex": batch_index,
             "batchSize": batch_size,
-            "selectedRegionCodes": DAANGN_REGION_CODES,
+            "selectedRegionCodes":
+                DAANGN_REGION_CODES,
         }
 
         try:
@@ -264,7 +279,9 @@ def request_daangn(keyword):
                 data
             )
 
-            results.extend(products)
+            results.extend(
+                products
+            )
 
             print(
                 f"당근 이번 배치 "
@@ -300,13 +317,87 @@ def remove_duplicates(items):
             continue
 
         seen.add(key)
-        results.append(item)
+
+        results.append(
+            item
+        )
 
     return results
 
 
-def search_joongmo_api(keyword):
+def is_old_product(
+    date_text,
+    months
+):
+    if not date_text:
+        return False
+
+    try:
+        text = str(
+            date_text
+        ).strip()
+
+        if text.endswith("Z"):
+            text = (
+                text[:-1]
+                + "+00:00"
+            )
+
+        date = datetime.fromisoformat(
+            text
+        )
+
+        if date.tzinfo is None:
+            date = date.replace(
+                tzinfo=timezone.utc
+            )
+
+        now = datetime.now(
+            timezone.utc
+        )
+
+        days = (
+            now - date
+        ).days
+
+        return days >= months * 30
+
+    except Exception:
+        return False
+
+
+def search_joongmo_api(
+    query,
+    options=None
+):
     results = []
+
+    if options is None:
+        options = {}
+
+    special_options = options.get(
+        "special",
+        {}
+    )
+
+    special_types = special_options.get(
+        "type",
+        []
+    )
+
+    if isinstance(special_types, str):
+        special_types = [special_types]
+
+    months = None
+
+    if "max_listing_age_months" in special_types:
+        value = special_options.get(
+            "max_listing_age_months",
+            -1
+        )
+
+        if value != -1:
+            months = value
 
     for platform in API_LIST:
         name = PLATFORM_NAME.get(
@@ -321,13 +412,13 @@ def search_joongmo_api(keyword):
         try:
             if platform == "daangn":
                 products = request_daangn(
-                    keyword
+                    query
                 )
 
             else:
                 products = request_normal_platform(
                     platform,
-                    keyword
+                    query
                 )
 
             for product in products:
@@ -363,9 +454,72 @@ def search_joongmo_api(keyword):
 
         time.sleep(0.4)
 
+    # =========================
+    # 중복 제거
+    # =========================
+
     results = remove_duplicates(
         results
     )
+
+    # =========================
+    # 필터 전 개수
+    # =========================
+
+    before_filter_count = len(
+        results
+    )
+
+    # =========================
+    # 오래된 매물 제거
+    # =========================
+
+    if months is not None:
+        filtered_results = []
+
+        for item in results:
+            date_text = item.get(
+                "teugisahang"
+            )
+
+            if is_old_product(
+                date_text,
+                months
+            ):
+                continue
+
+            filtered_results.append(
+                item
+            )
+
+        results = filtered_results
+
+    # =========================
+    # 필터 후 개수
+    # =========================
+
+    after_filter_count = len(
+        results
+    )
+
+    print(
+        f"필터 전 결과 수: "
+        f"{before_filter_count}"
+    )
+
+    print(
+        f"필터 후 결과 수: "
+        f"{after_filter_count}"
+    )
+
+    print(
+        f"제외된 결과 수: "
+        f"{before_filter_count - after_filter_count}"
+    )
+
+    # =========================
+    # 가격순 정렬
+    # =========================
 
     results.sort(
         key=lambda item:
@@ -383,13 +537,19 @@ def search_joongmo_api(keyword):
 
 
 if __name__ == "__main__":
-    result = search_joongmo_api(
-        "CPU"
-    )
 
-    print(
-        "최종 결과 개수:",
-        len(result)
+    query = "600w"
+
+    result = search_joongmo_api(
+        query,
+        {
+            "special": {
+                "type": [
+                    "max_listing_age_months"
+                ],
+                "max_listing_age_months": 3
+            }
+        }
     )
 
     print(
