@@ -38,6 +38,8 @@ def get_settings():
         "type": "settings_result",
         "status": "ok",
         "settings": {
+            "danawa_enabled": c.get("danawa", {}).get("enabled", True),
+            "joongmo_enabled": c.get("joongmo", {}).get("enabled", True),
             "danawa_sort":
                 c.get(
                     "danawa",
@@ -66,8 +68,10 @@ def get_settings():
 
 
 def save_settings(data):
+    previous = read_config()
     config = {
         "danawa": {
+            "enabled": data.get("danawa_enabled", previous.get("danawa", {}).get("enabled", True)) is not False,
             "api": {
                 "sort":
                     data.get(
@@ -78,6 +82,7 @@ def save_settings(data):
         },
 
         "joongmo": {
+            "enabled": data.get("joongmo_enabled", previous.get("joongmo", {}).get("enabled", True)) is not False,
             "special": {
                 "type": [
                     "max_listing_age_months"
@@ -106,5 +111,6 @@ def save_settings(data):
             "ok",
 
         "message":
-            "설정 저장 완료"
+            "설정 저장 완료",
+        "settings": get_settings()["settings"]
     }

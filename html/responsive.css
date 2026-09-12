@@ -1,4 +1,16 @@
 /* Shared visual language and layouts for desktop, tablet and phone. */
+.provider-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.provider-heading h2 { margin: 0; }
+.provider-toggle { position: relative; display: flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; flex-shrink: 0; }
+.provider-toggle input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.toggle-track { width: 44px; height: 26px; border-radius: 20px; background: #a8b2c3; pointer-events: none; }
+.toggle-track::before { content: ""; display: block; width: 20px; height: 20px; margin: 3px; background: white; border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 3px #18243b22; }
+.provider-toggle input:checked + .toggle-track { background: #3568ee; }
+.provider-toggle input:checked + .toggle-track::before { transform: translateX(18px); }
+.provider-toggle input:focus-visible + .toggle-track { outline: 3px solid #90b3ff; outline-offset: 3px; }
+.toggle-state { width: 26px; font-size: 11px; font-weight: 700; color: #69758b; }
+.toggle-state::after { content: "OFF"; }
+.provider-toggle input:checked ~ .toggle-state::after { content: "ON"; color: #3568ee; }
 :root {
     --ink: #18243b;
     --muted: #69758b;

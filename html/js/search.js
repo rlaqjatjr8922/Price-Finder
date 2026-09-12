@@ -457,6 +457,23 @@ async function callSearchApi() {
         return;
     }
 
+    let providers;
+    try {
+        const response = await fetch("/Settings");
+        const data = await response.json();
+        if (!response.ok || data.status !== "ok") throw new Error("설정 불러오기 실패");
+        providers = data.settings;
+    } catch (error) {
+        alert("검색 설정을 불러오지 못했습니다. 다시 시도해 주세요.");
+        return;
+    }
+    const useDanawa = providers.danawa_enabled !== false;
+    const useJoongmo = providers.joongmo_enabled !== false;
+    if (!useDanawa && !useJoongmo) {
+        alert("검색할 사이트가 꺼져 있습니다. 설정에서 다나와 또는 중고닷을 켜 주세요.");
+        return;
+    }
+
     currentQuery = keyword;
 
     searchProducts = [];
@@ -506,8 +523,12 @@ async function callSearchApi() {
 
     updatePageInfo();
 
-    callDanawaSearch(keyword);
-    callJoongmoSearch(keyword);
+    danawaDone = !useDanawa;
+    joongmoDone = !useJoongmo;
+    document.getElementById("danawaCount").innerText = useDanawa ? "검색중" : "OFF";
+    document.getElementById("joongmoCount").innerText = useJoongmo ? "검색중" : "OFF";
+    if (useDanawa) callDanawaSearch(keyword);
+    if (useJoongmo) callJoongmoSearch(keyword);
 }
 
 

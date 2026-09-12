@@ -115,6 +115,9 @@ def search_danawa(query):
     # 검색어 + 설정값 전달
     # =========================
 
+    if danawa_settings.get("enabled", True) is False:
+        return {"type": "danawa_result", "status": "ok", "count": 0, "disabled": True}
+
     results = search_danawa_api(
         query,
         danawa_settings
@@ -166,6 +169,9 @@ def search_joongmo(query):
     # 검색어 + 설정값 전달
     # =========================
 
+    if joongmo_settings.get("enabled", True) is False:
+        return {"type": "joongmo_result", "status": "ok", "count": 0, "disabled": True}
+
     results = search_joongmo_api(
         query,
         joongmo_settings
@@ -201,9 +207,10 @@ def search_result():
     # 다나와 + 중고 전체 합치기
     # =========================
 
+    config = Settings.read_config()
     items = (
-        danawa_items
-        + joongmo_items
+        (danawa_items if config.get("danawa", {}).get("enabled", True) else [])
+        + (joongmo_items if config.get("joongmo", {}).get("enabled", True) else [])
     )
 
     # =========================

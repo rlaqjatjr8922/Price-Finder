@@ -49,10 +49,16 @@ function renderSettingsLayout(
     mainBox.innerHTML = `
         <div class="page-eyebrow">MAKE IT YOURS</div>
         <h1>내게 맞는 검색 설정</h1>
-        <p class="page-description">정렬 순서와 중고 매물 기간을 설정하세요.</p>
+        <p class="page-description">검색할 사이트를 켜거나 끈 뒤 저장해 주세요.</p>
 
         <div class="settings-box">
-            <h2>다나와 설정</h2>
+            <div class="provider-heading"><h2>다나와 설정</h2>
+                <label class="provider-toggle">
+                    <input type="checkbox" role="switch" id="danawaEnabled" aria-label="다나와 검색 사용" ${settings.danawa_enabled !== false ? "checked" : ""}>
+                    <span class="toggle-track" aria-hidden="true"></span>
+                    <span class="toggle-state" aria-hidden="true"></span>
+                </label>
+            </div>
 
             <div class="settings-row">
                 <label for="danawaSortSelect">
@@ -75,7 +81,13 @@ function renderSettingsLayout(
         </div>
 
         <div class="settings-box">
-            <h2>중고닷 설정</h2>
+            <div class="provider-heading"><h2>중고닷 설정</h2>
+                <label class="provider-toggle">
+                    <input type="checkbox" role="switch" id="joongmoEnabled" aria-label="중고닷 검색 사용" ${settings.joongmo_enabled !== false ? "checked" : ""}>
+                    <span class="toggle-track" aria-hidden="true"></span>
+                    <span class="toggle-state" aria-hidden="true"></span>
+                </label>
+            </div>
 
             ${makeSliderSettingHtml({
                 boxId: "monthsBox",
@@ -327,6 +339,8 @@ function getEnabledNumber(
 
 async function saveSettings() {
     const saveData = {
+        danawa_enabled: document.getElementById("danawaEnabled").checked,
+        joongmo_enabled: document.getElementById("joongmoEnabled").checked,
         danawa_sort:
             document.getElementById(
                 "danawaSortSelect"
