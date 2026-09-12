@@ -113,7 +113,9 @@ function renderSearchLayout(mainBox) {
 
 
     mainBox.innerHTML = `
-        <h1>검색 화면</h1>
+        <div class="page-eyebrow">FIND YOUR BEST PRICE</div>
+        <h1>좋은 가격을 찾아볼까요?</h1>
+        <p class="page-description">제품명이나 모델명으로 새 상품과 중고 가격을 비교하세요.</p>
 
         <div class="search-part-status-list">
             ${partStatusHtml}
@@ -129,6 +131,8 @@ function renderSearchLayout(mainBox) {
                 id="searchTextInput"
                 class="search-text-input"
                 placeholder="검색어 입력"
+                aria-label="제품명 또는 모델명"
+                enterkeyhint="search"
             >
 
             <button
@@ -153,6 +157,8 @@ function renderSearchLayout(mainBox) {
                 <input
                     type="number"
                     id="minPriceInput"
+                    aria-label="최소 가격"
+                    inputmode="numeric"
                     class="price-input"
                     placeholder="최소가격"
                     min="0"
@@ -164,6 +170,8 @@ function renderSearchLayout(mainBox) {
                 <input
                     type="number"
                     id="maxPriceInput"
+                    aria-label="최대 가격"
+                    inputmode="numeric"
                     class="price-input"
                     placeholder="최대가격"
                     min="0"
@@ -185,6 +193,7 @@ function renderSearchLayout(mainBox) {
                 <input
                     type="range"
                     id="minPriceSlider"
+                    aria-label="최소 가격 조절"
                     class="range-slider range-slider-min"
                     min="0"
                     max="0"
@@ -195,6 +204,7 @@ function renderSearchLayout(mainBox) {
                 <input
                     type="range"
                     id="maxPriceSlider"
+                    aria-label="최대 가격 조절"
                     class="range-slider range-slider-max"
                     min="0"
                     max="0"
@@ -279,6 +289,8 @@ function renderSearchLayout(mainBox) {
                 <input
                     type="number"
                     id="viewNumberInput"
+                    aria-label="상세 정보를 볼 상품 번호"
+                    inputmode="numeric"
                     class="view-number-input"
                     placeholder="번호 입력"
                     min="1"

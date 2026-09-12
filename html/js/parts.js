@@ -8,8 +8,10 @@ async function showPartsPage(mainBox) {
     const data = await res.json();
 
     let html = `
-        <h1>필요한부품</h1>
-        <p>필요한 부품 버튼을 누르세요.</p>
+        <div class="page-eyebrow">BUILD YOUR PC</div>
+        <h1>어떤 부품을 찾으세요?</h1>
+        <p class="page-description">필요한 부품을 고르고, 더 좋은 가격을 찾아보세요.</p>
+        <div class="selection-heading"><span>부품 선택</span><span id="partCount" aria-live="polite"></span></div>
 
         <div class="part-list">
     `;
@@ -22,8 +24,10 @@ async function showPartsPage(mainBox) {
                 class="part-item${selectedClass}"
                 data-part-name="${partName}"
                 data-selected="${isSelected}"
+                aria-pressed="${isSelected}"
             >
-                ${partName}
+                <span class="part-symbol" aria-hidden="true">${selectedPartIcons[partName] || "🔧"}</span>
+                <span>${partName}</span><span class="part-check" aria-hidden="true">${isSelected ? "✓" : "+"}</span>
             </button>
         `;
     });
@@ -31,12 +35,13 @@ async function showPartsPage(mainBox) {
     html += `
         </div>
 
-        <button class="next-button" id="nextButton">다음</button>
+        <div class="parts-action"><p>다나와 · 중고닷 가격을 한곳에서</p><button class="next-button" id="nextButton">가격 비교하러 가기 <span aria-hidden="true">→</span></button></div>
     `;
 
     mainBox.innerHTML = html;
 
     setupPartButtons();
+    updatePartCount();
     setupNextButton();
 }
 
@@ -61,6 +66,8 @@ function setupPartButtons() {
             });
 
             button.dataset.selected = String(newValue);
+            button.setAttribute("aria-pressed", String(newValue));
+            button.querySelector(".part-check").textContent = newValue ? "✓" : "+";
 
             if (newValue) {
                 button.classList.add("selected");
@@ -69,8 +76,15 @@ function setupPartButtons() {
             }
 
             console.log("서버로 보냄:", data);
+            updatePartCount();
         });
     });
+}
+
+function updatePartCount() {
+    const count = document.querySelectorAll('.part-item[data-selected="true"]').length;
+    const label = document.getElementById("partCount");
+    if (label) label.textContent = `${count}개 선택됨`;
 }
 
 function setupNextButton() {

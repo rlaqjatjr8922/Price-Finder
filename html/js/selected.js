@@ -129,6 +129,9 @@ function renderSelectedParts(
 
     mainBox.innerHTML = `
         <div class="selected-page">
+            <div class="page-eyebrow">YOUR PC BUILD</div>
+            <h1>내가 고른 부품</h1>
+            <p class="page-description">선택한 상품과 수량, 전체 금액을 확인하세요.</p>
 
             <div class="selected-list">
                 ${rowsHtml}

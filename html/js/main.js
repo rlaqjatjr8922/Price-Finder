@@ -1,5 +1,5 @@
 async function loadLayout() {
-    const menuRes = await fetch("menu.html");
+    const menuRes = await fetch("menu.html?v=2");
     const screenRes = await fetch("screen.html");
 
     document.getElementById("menuArea").innerHTML = await menuRes.text();
@@ -27,6 +27,15 @@ async function showPage(page) {
         console.log("mainBox 없음");
         return;
     }
+
+    document.querySelectorAll(".menu button").forEach((button) => {
+        const active = button.dataset.page === page;
+        button.classList.toggle("active", active);
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+    });
+    mainBox.dataset.page = page;
+    window.scrollTo({ top: 0, behavior: "instant" });
 
     if (page === "parts") {
         await showPartsPage(mainBox);

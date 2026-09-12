@@ -47,7 +47,9 @@ function renderSettingsLayout(
     );
 
     mainBox.innerHTML = `
-        <h1>설정 화면</h1>
+        <div class="page-eyebrow">MAKE IT YOURS</div>
+        <h1>내게 맞는 검색 설정</h1>
+        <p class="page-description">정렬 순서와 중고 매물 기간을 설정하세요.</p>
 
         <div class="settings-box">
             <h2>다나와 설정</h2>
@@ -160,6 +162,8 @@ function makeSliderSettingHtml(
                 <input
                     type="number"
                     id="${config.inputId}"
+                    aria-label="${config.title} (${config.unit})"
+                    inputmode="numeric"
                     class="settings-number-input"
                     min="${config.min}"
                     max="${config.max}"
@@ -170,6 +174,7 @@ function makeSliderSettingHtml(
                 <input
                     type="range"
                     id="${config.sliderId}"
+                    aria-label="${config.title} 조절"
                     class="settings-range"
                     min="${config.min}"
                     max="${config.max}"
